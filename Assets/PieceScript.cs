@@ -10,17 +10,28 @@ public class PieceScript : MonoBehaviour
     public string title;
     private int xPos;
     private int yPos;
+    
     void Start()
     {
-        
+        xPos = (int)transform.position.x;
+        yPos = (int)transform.position.y;
+        Debug.Log(color + " " + title + ": " + xPos + ", " + yPos);
     }
 
 
 
     public void showPath() {
-        if (title.Equals("pawn")){
-            Instantiate(dot, new Vector3(xPos, yPos + 1, 0), Quaternion.identity);
-            Instantiate(dot, new Vector3(xPos, yPos + 2, 0), Quaternion.identity);
+        if (title == "pawn"){
+            if (color == "black") {
+                Instantiate(dot, new Vector3(xPos, yPos + 1, 0), Quaternion.identity);
+                Instantiate(dot, new Vector3(xPos, yPos + 2, 0), Quaternion.identity);
+            }
+            else {
+                Instantiate(dot, new Vector3(xPos, yPos - 1, 0), Quaternion.identity);
+                Instantiate(dot, new Vector3(xPos, yPos - 2, 0), Quaternion.identity);
+            }
+            
+        
         }
     }
 
@@ -28,12 +39,11 @@ public class PieceScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 pos = transform.position;
-        xPos = (int)pos.getXPos();
-        yPos = (int)pos.getYPos();
+        
     }
 
-    public void onMouseDown() {
+    void OnMouseDown() {
+        Debug.Log("clicked");
         showPath();
     }
 }
