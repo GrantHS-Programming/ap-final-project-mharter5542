@@ -10,13 +10,18 @@ public class PieceScript : MonoBehaviour
     public string title;
     private int xPos;
     private int yPos;
+    public GameObject board1;
     
     void Start()
     {
         xPos = (int)transform.position.x;
         yPos = (int)transform.position.y;
         Debug.Log(color + " " + title + ": " + xPos + ", " + yPos);
+        
     }
+
+    public int GetXPos() {return xPos;}
+    public int GetYPos() {return yPos;}
 
 
 
@@ -44,6 +49,6 @@ public class PieceScript : MonoBehaviour
 
     void OnMouseDown() {
         Debug.Log("clicked");
-        showPath();
+        board1.GetComponent<board>().path(xPos,yPos,title,color);
     }
 }

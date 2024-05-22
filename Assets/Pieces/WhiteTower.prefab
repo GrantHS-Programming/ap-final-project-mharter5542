@@ -98,7 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18d1c898228f94681b4fd40e96758a31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dot: {fileID: 0}
+  dot: {fileID: 6114264431073365141, guid: a74bcac16a32a4bae9f2586dc6fd1568, type: 3}
   color: white
   title: tower
 --- !u!61 &3062129517300442104
