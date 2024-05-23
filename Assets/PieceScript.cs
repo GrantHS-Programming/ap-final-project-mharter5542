@@ -7,16 +7,21 @@ public class PieceScript : MonoBehaviour
     // Start is called before the first frame update
     public GameObject dot;
     public string color;
+    private bool isWhite;
     public string title;
     private int xPos;
     private int yPos;
-    public GameObject board1;
+    public GameObject theBoard;
     
     void Start()
     {
         xPos = (int)transform.position.x;
         yPos = (int)transform.position.y;
         Debug.Log(color + " " + title + ": " + xPos + ", " + yPos);
+        theBoard = GameObject.FindWithTag("GameController");
+        dot = GameObject.FindWithTag("dot");
+        if (color.Equals("white")) {isWhite = true;}
+        else {isWhite = false;}
         
     }
 
@@ -44,11 +49,15 @@ public class PieceScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        xPos = (int)transform.position.x;
+        yPos = (int)transform.position.y;
     }
 
     void OnMouseDown() {
-        Debug.Log("clicked");
-        board1.GetComponent<board>().path(xPos,yPos,title,color);
+        if (theBoard.GetComponent<Board>().IsWhiteTurn() == isWhite) {
+            Debug.Log("clicked");
+            theBoard.GetComponent<Board>().SetSelected(xPos,yPos);
+            theBoard.GetComponent<Board>().Path(xPos,yPos,title,color);
+        }
     }
 }
