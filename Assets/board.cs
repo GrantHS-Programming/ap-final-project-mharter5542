@@ -5,7 +5,7 @@ public class Board : MonoBehaviour
 {
     // Start is called before the first frame update
     public GameObject dot;
-    public static List<GameObject> pieces = new List<GameObject>();
+    public GameObject[] pieces = new GameObject[32];
     
     public static GameObject[,] spacesTaken = new GameObject[8,8];
     public static GameObject selected;
@@ -14,16 +14,18 @@ public class Board : MonoBehaviour
 
     void Start()
     {
-        pieces.Add();
+        
     }
 
     // Update is called once per frame
     void Update()
     {
         foreach (GameObject obj in pieces) {
-            int x = obj.GetComponent<PieceScript>().GetXPos();
-            int y = obj.GetComponent<PieceScript>().GetYPos();
-            if (x >= 0 && x < 8 && y >= 0 && y < 8) {spacesTaken[x,y] = obj;}
+            if (obj != null) {
+                int x = obj.GetComponent<PieceScript>().GetXPos();
+                int y = obj.GetComponent<PieceScript>().GetYPos();
+                if (x >= 0 && x < 8 && y >= 0 && y < 8) {spacesTaken[x,y] = obj;}
+            }
         }
         
     }
@@ -36,6 +38,7 @@ public class Board : MonoBehaviour
                     Destroy(spacesTaken[newX,newY]);
                 }
                 selected.transform.position = new Vector3(newX, newY, 0);
+                selected.GetComponent<PieceScript>().setIsFirstMove(false);
                 spacesTaken[newX,newY] = selected;
                 spacesTaken[startX,startY] = null; 
             }
@@ -49,7 +52,12 @@ public class Board : MonoBehaviour
         
         Destroy(spacesTaken[x,y]);
         spacesTaken[x,y] = null;
-
+        for (int i = 0; i < pieces.Length; i++) {
+            if (pieces[i] == obj) {
+                pieces[i] = null;
+            }
+        }
+       
     }
 
     public static GameObject[,] GetSpacesTaken() {return spacesTaken;}
@@ -65,50 +73,107 @@ public class Board : MonoBehaviour
     public void Path(int x, int y, string title, string color) {
         DestroyAllDots();
         if (x >= 0 && x < 8 && y >= 0 && y < 8) {
+            GameObject piece = spacesTaken[x,y];
+            if (piece != null) {
+                GameObject obj;
+                if (title.Equals("pawn")) {
+                    if (color.Equals("black")) {
+                        bool blocked = false;
+                        if (y + 1 < 8 && spacesTaken[x, y + 1] != null) {
+                            blocked = true;
+                        }
+                        if (y + 1 < 8 && !blocked) {
+                            obj = Instantiate(dot, new Vector3(x, y + 1, 0), Quaternion.identity);
+                            obj.GetComponent<DotScript>().SetPiece(spacesTaken[x,y]);
+                            obj.GetComponent<DotScript>().setDot(obj);
+                            dots.Add(obj);
+                    
+                            if (piece.GetComponent<PieceScript>().isFirstMove()) {
+                                obj = Instantiate(dot, new Vector3(x, y + 2, 0), Quaternion.identity);
+                                obj.GetComponent<DotScript>().SetPiece(spacesTaken[x,y]);
+                                obj.GetComponent<DotScript>().setDot(obj);
+                                dots.Add(obj);
+                            }
+                        }
+                        
+                        if (y + 1 < 8 && x + 1 < 8 && spacesTaken[x+1,y+1] != null && spacesTaken[x+1,y+1].GetComponent<PieceScript>().GetColor().Equals("white")) {
+                            obj = Instantiate(dot, new Vector3(x + 1, y + 1, 0), Quaternion.identity);
+                            obj.GetComponent<DotScript>().SetPiece(spacesTaken[x,y]);
+                            obj.GetComponent<DotScript>().setDot(obj);
+                            dots.Add(obj);
+                        }
+                        if (y + 1 < 8 && x - 1 >= 0 && spacesTaken[x-1,y+1] != null && spacesTaken[x-1,y+1].GetComponent<PieceScript>().GetColor().Equals("white")) {
+                            obj = Instantiate(dot, new Vector3(x - 1, y + 1, 0), Quaternion.identity);
+                            obj.GetComponent<DotScript>().SetPiece(spacesTaken[x,y]);
+                            obj.GetComponent<DotScript>().setDot(obj);
+                            dots.Add(obj);
+                        }
+                        
+                    }
+                    else {
+                        if (y - 1 >= 0 && spacesTaken[x,y-1] != null) {
+                            obj = Instantiate(dot, new Vector3(x, y - 1, 0), Quaternion.identity);
+                            obj.GetComponent<DotScript>().SetPiece(spacesTaken[x,y]);
+                            obj.GetComponent<DotScript>().setDot(obj);
+                            dots.Add(obj);
+                            if (piece.GetComponent<PieceScript>().isFirstMove()) {
+                                obj = Instantiate(dot, new Vector3(x, y - 2, 0), Quaternion.identity);
+                                obj.GetComponent<DotScript>().SetPiece(spacesTaken[x,y]);
+                                obj.GetComponent<DotScript>().setDot(obj);
+                                dots.Add(obj);
+                            }
+                        }
+                    }
+                }
+                else if (title.Equals("tower")) {
+                    obj = Instantiate(dot, new Vector3(x, y + 1, 0), Quaternion.identity);
+                    obj.GetComponent<DotScript>().SetPiece(spacesTaken[x,y]);
+                    obj.GetComponent<DotScript>().setDot(obj);
+                    dots.Add(obj);
+                    bool blocked = false;
+                    for (int i = y + 2; i < 8 && !blocked ; i++) {
+                        if (spacesTaken[x,i] != null) {blocked = true;}
+                        obj = Instantiate(dot, new Vector3(x, i, 0), Quaternion.identity);
+                        obj.GetComponent<DotScript>().SetPiece(spacesTaken[x,y]);
+                        obj.GetComponent<DotScript>().setDot(obj);
+                        dots.Add(obj);
+                    }
+                    blocked = false;
+                    for (int i = y - 1; i >= 0 && !blocked ; i--) {
+                        if (spacesTaken[x,i] != null) {blocked = true;}
+                        obj = Instantiate(dot, new Vector3(x, i, 0), Quaternion.identity);
+                        obj.GetComponent<DotScript>().SetPiece(spacesTaken[x,y]);
+                        obj.GetComponent<DotScript>().setDot(obj);
+                        dots.Add(obj);
+                    }
+                    blocked = false;
+                    for (int i = x - 1; i >= 0 && !blocked ; i--) {
+                        if (spacesTaken[i,y] != null) {blocked = true;}
+                        obj = Instantiate(dot, new Vector3(i, y, 0), Quaternion.identity);
+                        obj.GetComponent<DotScript>().SetPiece(spacesTaken[x,y]);
+                        obj.GetComponent<DotScript>().setDot(obj);
+                        dots.Add(obj);
+                    }
+                    blocked = false;
+                    for (int i = x + 1; i < 8 && !blocked ; i++) {
+                        if (spacesTaken[i,y] != null) {blocked = true;}
+                        obj = Instantiate(dot, new Vector3(i, y, 0), Quaternion.identity);
+                        obj.GetComponent<DotScript>().SetPiece(spacesTaken[x,y]);
+                        obj.GetComponent<DotScript>().setDot(obj);
+                        dots.Add(obj);
+                    }
+                }
+
+            }
             
-            if (title.Equals("pawn")) {
-                if (color.Equals("black")) {
-                    GameObject obj = Instantiate(dot, new Vector3(x, y + 1, 0), Quaternion.identity);
-                    obj.GetComponent<DotScript>().SetPiece(spacesTaken[x,y]);
-                    dots.Add(obj);
-                    obj = Instantiate(dot, new Vector3(x, y + 2, 0), Quaternion.identity);
-                    obj.GetComponent<DotScript>().SetPiece(spacesTaken[x,y]);
-                    dots.Add(obj);
-                }
-                else {
-                    GameObject obj = Instantiate(dot, new Vector3(x, y - 1, 0), Quaternion.identity);
-                    obj.GetComponent<DotScript>().SetPiece(spacesTaken[x,y]);
-                    dots.Add(obj);
-                    obj = Instantiate(dot, new Vector3(x, y - 2, 0), Quaternion.identity);
-                    obj.GetComponent<DotScript>().SetPiece(spacesTaken[x,y]);
-                    dots.Add(obj);
-                }
-            }
-            else if (title.Equals("tower")) {
-                if (color.Equals("black")) {
-                    GameObject obj = Instantiate(dot, new Vector3(x, y + 1, 0), Quaternion.identity);
-                    obj.GetComponent<DotScript>().SetPiece(spacesTaken[x,y]);
-                    dots.Add(obj);
-                    obj = Instantiate(dot, new Vector3(x, y + 2, 0), Quaternion.identity);
-                    obj.GetComponent<DotScript>().SetPiece(spacesTaken[x,y]);
-                    dots.Add(obj);
-                }
-                else {
-                    GameObject obj = Instantiate(dot, new Vector3(x, y - 1, 0), Quaternion.identity);
-                    obj.GetComponent<DotScript>().SetPiece(spacesTaken[x,y]);
-                    dots.Add(obj);
-                    obj = Instantiate(dot, new Vector3(x, y - 2, 0), Quaternion.identity);
-                    obj.GetComponent<DotScript>().SetPiece(spacesTaken[x,y]);
-                    dots.Add(obj);
-                }
-            }
+            
         }
 
     }
 
     public void DestroyAllDots() {
         foreach (GameObject obj in dots) {
-            Destroy(obj);
+            if (obj != null) {Destroy(obj);}
         }
         dots.Clear();
     }

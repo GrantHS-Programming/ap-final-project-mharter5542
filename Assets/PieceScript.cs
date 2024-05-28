@@ -12,7 +12,7 @@ public class PieceScript : MonoBehaviour
     private int xPos;
     private int yPos;
     public GameObject theBoard;
-    
+    public bool firstMove = true;
     void Start()
     {
         xPos = (int)transform.position.x;
@@ -27,6 +27,9 @@ public class PieceScript : MonoBehaviour
 
     public int GetXPos() {return xPos;}
     public int GetYPos() {return yPos;}
+    public string GetColor() {return color;}
+    public bool isFirstMove() {return firstMove;}
+    public void setIsFirstMove(bool value) {firstMove = value;}
 
 
 

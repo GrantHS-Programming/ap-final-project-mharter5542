@@ -6,6 +6,7 @@ public class DotScript : MonoBehaviour
 {
     private GameObject piece;
     private GameObject board;
+    private GameObject dot;
     // Start is called before the first frame update
     void Start()
     {
@@ -13,7 +14,15 @@ public class DotScript : MonoBehaviour
     }
 
     public void SetPiece(GameObject obj) {piece = obj;}
+    public void setDot(GameObject obj) {
+        dot = obj;
+        int xPos = (int)dot.transform.position.x;
+        int yPos = (int)dot.transform.position.y;
+        if (xPos < 0 || xPos > 7 || yPos < 0 || yPos > 7) {
+            Destroy(dot);
+        }
 
+    }
     // Update is called once per frame
     void Update()
     {
