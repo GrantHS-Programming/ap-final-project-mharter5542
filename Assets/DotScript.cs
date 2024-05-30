@@ -10,7 +10,7 @@ public class DotScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        board = GameObject.FindWithTag("GameController");
+        board = GameObject.FindWithTag("Board");
     }
 
     public void SetPiece(GameObject obj) {piece = obj;}

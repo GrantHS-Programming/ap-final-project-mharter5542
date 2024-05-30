@@ -78,11 +78,7 @@ public class Board : MonoBehaviour
                 GameObject obj;
                 if (title.Equals("pawn")) {
                     if (color.Equals("black")) {
-                        bool blocked = false;
-                        if (y + 1 < 8 && spacesTaken[x, y + 1] != null) {
-                            blocked = true;
-                        }
-                        if (y + 1 < 8 && !blocked) {
+                        if (y < 6 && spacesTaken[x, y + 1] == null ) {
                             obj = Instantiate(dot, new Vector3(x, y + 1, 0), Quaternion.identity);
                             obj.GetComponent<DotScript>().SetPiece(spacesTaken[x,y]);
                             obj.GetComponent<DotScript>().setDot(obj);
@@ -111,11 +107,12 @@ public class Board : MonoBehaviour
                         
                     }
                     else {
-                        if (y - 1 >= 0 && spacesTaken[x,y-1] != null) {
+                        if (y > 0 && spacesTaken[x, y - 1] == null) {
                             obj = Instantiate(dot, new Vector3(x, y - 1, 0), Quaternion.identity);
                             obj.GetComponent<DotScript>().SetPiece(spacesTaken[x,y]);
                             obj.GetComponent<DotScript>().setDot(obj);
                             dots.Add(obj);
+                    
                             if (piece.GetComponent<PieceScript>().isFirstMove()) {
                                 obj = Instantiate(dot, new Vector3(x, y - 2, 0), Quaternion.identity);
                                 obj.GetComponent<DotScript>().SetPiece(spacesTaken[x,y]);
@@ -123,44 +120,66 @@ public class Board : MonoBehaviour
                                 dots.Add(obj);
                             }
                         }
+                        
+                        if (y > 0 && x > 0 && spacesTaken[x-1,y-1] != null && spacesTaken[x-1,y-1].GetComponent<PieceScript>().GetColor().Equals("black")) {
+                            obj = Instantiate(dot, new Vector3(x - 1, y - 1, 0), Quaternion.identity);
+                            obj.GetComponent<DotScript>().SetPiece(spacesTaken[x,y]);
+                            obj.GetComponent<DotScript>().setDot(obj);
+                            dots.Add(obj);
+                        }
+                        if (y > 0 && x < 7 && spacesTaken[x+1,y-1] != null && spacesTaken[x+1,y-1].GetComponent<PieceScript>().GetColor().Equals("black")) {
+                            obj = Instantiate(dot, new Vector3(x + 1, y - 1, 0), Quaternion.identity);
+                            obj.GetComponent<DotScript>().SetPiece(spacesTaken[x,y]);
+                            obj.GetComponent<DotScript>().setDot(obj);
+                            dots.Add(obj);
+                        }
                     }
                 }
                 else if (title.Equals("tower")) {
-                    obj = Instantiate(dot, new Vector3(x, y + 1, 0), Quaternion.identity);
-                    obj.GetComponent<DotScript>().SetPiece(spacesTaken[x,y]);
-                    obj.GetComponent<DotScript>().setDot(obj);
-                    dots.Add(obj);
+            
                     bool blocked = false;
-                    for (int i = y + 2; i < 8 && !blocked ; i++) {
-                        if (spacesTaken[x,i] != null) {blocked = true;}
-                        obj = Instantiate(dot, new Vector3(x, i, 0), Quaternion.identity);
-                        obj.GetComponent<DotScript>().SetPiece(spacesTaken[x,y]);
-                        obj.GetComponent<DotScript>().setDot(obj);
-                        dots.Add(obj);
+                    for (int i = y + 1; i < 8 && !blocked ; i++) {
+                        if (spacesTaken[x,i] != null && spacesTaken[x,i].GetComponent<PieceScript>().GetColor().Equals(color)) {blocked = true;}
+                        else {
+                            obj = Instantiate(dot, new Vector3(x, i, 0), Quaternion.identity);
+                            obj.GetComponent<DotScript>().SetPiece(spacesTaken[x,y]);
+                            obj.GetComponent<DotScript>().setDot(obj);
+                            dots.Add(obj);
+                        }
+                        if (spacesTaken[x,i] != null ) {blocked = true;}
                     }
                     blocked = false;
                     for (int i = y - 1; i >= 0 && !blocked ; i--) {
-                        if (spacesTaken[x,i] != null) {blocked = true;}
-                        obj = Instantiate(dot, new Vector3(x, i, 0), Quaternion.identity);
-                        obj.GetComponent<DotScript>().SetPiece(spacesTaken[x,y]);
-                        obj.GetComponent<DotScript>().setDot(obj);
-                        dots.Add(obj);
+                        if (spacesTaken[x,i] != null && spacesTaken[x,i].GetComponent<PieceScript>().GetColor().Equals(color)) {blocked = true;}
+                        else {
+                            obj = Instantiate(dot, new Vector3(x, i, 0), Quaternion.identity);
+                            obj.GetComponent<DotScript>().SetPiece(spacesTaken[x,y]);
+                            obj.GetComponent<DotScript>().setDot(obj);
+                            dots.Add(obj);
+                        }
+                        if (spacesTaken[x,i] != null ) {blocked = true;}
                     }
                     blocked = false;
                     for (int i = x - 1; i >= 0 && !blocked ; i--) {
-                        if (spacesTaken[i,y] != null) {blocked = true;}
-                        obj = Instantiate(dot, new Vector3(i, y, 0), Quaternion.identity);
-                        obj.GetComponent<DotScript>().SetPiece(spacesTaken[x,y]);
-                        obj.GetComponent<DotScript>().setDot(obj);
-                        dots.Add(obj);
+                        if (spacesTaken[i,y] != null && spacesTaken[i,y].GetComponent<PieceScript>().GetColor().Equals(color)) {blocked = true;}
+                        else {
+                            obj = Instantiate(dot, new Vector3(i, y, 0), Quaternion.identity);
+                            obj.GetComponent<DotScript>().SetPiece(spacesTaken[x,y]);
+                            obj.GetComponent<DotScript>().setDot(obj);
+                            dots.Add(obj);
+                        }
+                        if (spacesTaken[i,y] != null ) {blocked = true;}
                     }
                     blocked = false;
                     for (int i = x + 1; i < 8 && !blocked ; i++) {
-                        if (spacesTaken[i,y] != null) {blocked = true;}
-                        obj = Instantiate(dot, new Vector3(i, y, 0), Quaternion.identity);
-                        obj.GetComponent<DotScript>().SetPiece(spacesTaken[x,y]);
-                        obj.GetComponent<DotScript>().setDot(obj);
-                        dots.Add(obj);
+                        if (spacesTaken[i,y] != null && spacesTaken[i,y].GetComponent<PieceScript>().GetColor().Equals(color)) {blocked = true;}
+                        else {
+                            obj = Instantiate(dot, new Vector3(i, y, 0), Quaternion.identity);
+                            obj.GetComponent<DotScript>().SetPiece(spacesTaken[x,y]);
+                            obj.GetComponent<DotScript>().setDot(obj);
+                            dots.Add(obj);
+                        }
+                        if (spacesTaken[i,y] != null ) {blocked = true;}
                     }
                 }
 

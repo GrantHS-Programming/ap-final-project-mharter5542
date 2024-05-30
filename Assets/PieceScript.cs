@@ -18,8 +18,10 @@ public class PieceScript : MonoBehaviour
         xPos = (int)transform.position.x;
         yPos = (int)transform.position.y;
         Debug.Log(color + " " + title + ": " + xPos + ", " + yPos);
-        theBoard = GameObject.FindWithTag("GameController");
+        if (yPos < 5) {color = "black";}
+        else {color = "white";}
         dot = GameObject.FindWithTag("dot");
+        theBoard = GameObject.FindWithTag("Board");
         if (color.Equals("white")) {isWhite = true;}
         else {isWhite = false;}
         
