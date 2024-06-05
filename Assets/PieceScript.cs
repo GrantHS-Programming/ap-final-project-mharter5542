@@ -32,23 +32,7 @@ public class PieceScript : MonoBehaviour
     public string GetColor() {return color;}
     public bool isFirstMove() {return firstMove;}
     public void setIsFirstMove(bool value) {firstMove = value;}
-
-
-
-    public void showPath() {
-        if (title == "pawn"){
-            if (color == "black") {
-                Instantiate(dot, new Vector3(xPos, yPos + 1, 0), Quaternion.identity);
-                Instantiate(dot, new Vector3(xPos, yPos + 2, 0), Quaternion.identity);
-            }
-            else {
-                Instantiate(dot, new Vector3(xPos, yPos - 1, 0), Quaternion.identity);
-                Instantiate(dot, new Vector3(xPos, yPos - 2, 0), Quaternion.identity);
-            }
-            
-        
-        }
-    }
+    public string getTitle() {return title;}
 
 
     // Update is called once per frame
@@ -59,7 +43,7 @@ public class PieceScript : MonoBehaviour
     }
 
     void OnMouseDown() {
-        if (theBoard.GetComponent<Board>().IsWhiteTurn() == isWhite) {
+        if (theBoard.GetComponent<Board>().IsWhiteTurn() == isWhite && !theBoard.GetComponent<Board>().IsGameOver()) {
             Debug.Log("clicked");
             theBoard.GetComponent<Board>().SetSelected(xPos,yPos);
             theBoard.GetComponent<Board>().Path(xPos,yPos,title,color);

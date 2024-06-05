@@ -11,7 +11,9 @@ public class turnScript : MonoBehaviour
 
    
     public TextMeshProUGUI _turn;
+    
 
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -22,8 +24,10 @@ public class turnScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (board.GetComponent<Board>().IsWhiteTurn()) {_turn.text = "White Turn";}
-        else {_turn.text = "Black Turn";}
+        if (board.GetComponent<Board>().IsGameOver()) {_turn.text = board.GetComponent<Board>().getWinner() + " wins!";}
+        else if (board.GetComponent<Board>().IsWhiteTurn()) {_turn.text = "White Turn";}
+        else  {_turn.text = "Black Turn";}
+        
 
     }
 }

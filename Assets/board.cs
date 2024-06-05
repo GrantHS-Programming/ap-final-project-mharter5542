@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+
 public class Board : MonoBehaviour
 {
     // Start is called before the first frame update
@@ -13,6 +16,8 @@ public class Board : MonoBehaviour
     public bool whiteTurn = true;
     private int lastX = -1;
     private int lastY = -1;
+    private bool isGameOver = false;
+    private string winner = "none";
 
     void Start()
     {
@@ -32,12 +37,23 @@ public class Board : MonoBehaviour
         
     }
 
+    public void gameOver(string color) {
+        winner = color;
+        isGameOver = true;
+    }
+    public bool IsGameOver() {return isGameOver;}
+    public string getWinner() {return winner;}
+
     public void MovePiece(int startX, int startY, int newX, int newY) {
         if (startX >= 0 && startX < 8 && startY >= 0 && startY < 8) {
             selected = spacesTaken[startX,startY];
             if (newX >= 0 && newX < 8 && newY >= 0 && newY < 8) {
                 if (spacesTaken[newX,newY] != null) {
+                    if (spacesTaken[newX,newY].GetComponent<PieceScript>().getTitle().Equals("king")) {
+                        gameOver(spacesTaken[startX,startY].GetComponent<PieceScript>().GetColor());
+                    }
                     Destroy(spacesTaken[newX,newY]);
+                    
                 }
                 selected.transform.position = new Vector3(newX, newY, 0);
                 selected.GetComponent<PieceScript>().setIsFirstMove(false);
@@ -95,13 +111,13 @@ public class Board : MonoBehaviour
                 GameObject obj;
                 if (title.Equals("pawn")) {
                     if (color.Equals("black")) {
-                        if (y < 6 && spacesTaken[x, y + 1] == null ) {
+                        if (y < 7 && spacesTaken[x, y + 1] == null ) {
                             obj = Instantiate(dot, new Vector3(x, y + 1, 0), Quaternion.identity);
                             obj.GetComponent<DotScript>().SetPiece(spacesTaken[x,y]);
                             obj.GetComponent<DotScript>().setDot(obj);
                             dots.Add(obj);
-                    
-                            if (piece.GetComponent<PieceScript>().isFirstMove()) {
+
+                            if (piece.GetComponent<PieceScript>().isFirstMove() && y < 6 && spacesTaken[x,y+2] == null) {
                                 obj = Instantiate(dot, new Vector3(x, y + 2, 0), Quaternion.identity);
                                 obj.GetComponent<DotScript>().SetPiece(spacesTaken[x,y]);
                                 obj.GetComponent<DotScript>().setDot(obj);
@@ -130,7 +146,7 @@ public class Board : MonoBehaviour
                             obj.GetComponent<DotScript>().setDot(obj);
                             dots.Add(obj);
                     
-                            if (piece.GetComponent<PieceScript>().isFirstMove()) {
+                            if (piece.GetComponent<PieceScript>().isFirstMove() && y > 1 && spacesTaken[x,y-2] == null) {
                                 obj = Instantiate(dot, new Vector3(x, y - 2, 0), Quaternion.identity);
                                 obj.GetComponent<DotScript>().SetPiece(spacesTaken[x,y]);
                                 obj.GetComponent<DotScript>().setDot(obj);
@@ -342,9 +358,9 @@ public class Board : MonoBehaviour
                 if (title.Equals("king")) {
                     for (int n = x - 1; n < x + 2; n++) {
                         for (int i = y - 1; i < y + 2; i++) {
-                            if (n != x || i != y) {
+                            if (!(n == x && i == y)) {
                                 if (n < 8 && n >= 0 && i < 8 && i >= 0 && (spacesTaken[n, i] == null || !spacesTaken[n,i].GetComponent<PieceScript>().GetColor().Equals(color))){
-                                    obj = Instantiate(dot, new Vector3(x-2, y-1, 0), Quaternion.identity);
+                                    obj = Instantiate(dot, new Vector3(n, i, 0), Quaternion.identity);
                                     obj.GetComponent<DotScript>().SetPiece(spacesTaken[x,y]);
                                     obj.GetComponent<DotScript>().setDot(obj);
                                     dots.Add(obj);
