@@ -7,10 +7,15 @@ public class DotScript : MonoBehaviour
     private GameObject piece;
     private GameObject board;
     private GameObject dot;
+    public GameObject whiteKing;
+    public GameObject blackKing;
     // Start is called before the first frame update
     void Start()
     {
         board = GameObject.FindWithTag("Board");
+        
+        
+       
     }
 
     public void SetPiece(GameObject obj) {piece = obj;}
@@ -22,6 +27,21 @@ public class DotScript : MonoBehaviour
             Destroy(dot);
         }
 
+        
+    }
+
+    public void IsOnKing(){
+        board = GameObject.FindWithTag("Board");
+        int xPos = (int)transform.position.x;
+        int yPos = (int)transform.position.y;
+        whiteKing = GameObject.FindWithTag("WhiteKing");
+        blackKing = GameObject.FindWithTag("BlackKing");
+        //whiteKing.GetComponent<PieceScript>().PrintInfo();
+        //blackKing.GetComponent<PieceScript>().PrintInfo();
+        if (((int)whiteKing.transform.position.x == xPos && (int)whiteKing.transform.position.y == yPos) || ((int)blackKing.transform.position.x == xPos && (int)blackKing.transform.position.y == yPos)) {
+            board.GetComponent<Board>().setCheck(true);
+            Debug.Log("Dot is on a king");
+        }
     }
     // Update is called once per frame
     void Update()

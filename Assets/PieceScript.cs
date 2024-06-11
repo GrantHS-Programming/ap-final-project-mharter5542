@@ -17,7 +17,7 @@ public class PieceScript : MonoBehaviour
     {
         xPos = (int)transform.position.x;
         yPos = (int)transform.position.y;
-        Debug.Log(color + " " + title + ": " + xPos + ", " + yPos);
+        //Debug.Log(color + " " + title + ": " + xPos + ", " + yPos);
         if (yPos < 5) {color = "black";}
         else {color = "white";}
         dot = GameObject.FindWithTag("dot");
@@ -33,6 +33,7 @@ public class PieceScript : MonoBehaviour
     public bool isFirstMove() {return firstMove;}
     public void setIsFirstMove(bool value) {firstMove = value;}
     public string getTitle() {return title;}
+    public bool GetIsWhite() {return isWhite;}
 
 
     // Update is called once per frame
@@ -42,11 +43,22 @@ public class PieceScript : MonoBehaviour
         yPos = (int)transform.position.y;
     }
 
+    public string PrintInfo() {
+        Debug.Log(color + " " + title + " at (" + xPos + ", " + yPos + ")");
+        return color + " " + title + " at (" + xPos + ", " + yPos + ")";
+    }
+    public void ShowPath() {
+        theBoard.GetComponent<Board>().Path(xPos,yPos,title,color, true);
+    }
+    public void ShowPathWithOtherPaths() {
+        theBoard.GetComponent<Board>().Path(xPos,yPos,title,color, false);
+    }
+
     void OnMouseDown() {
-        if (theBoard.GetComponent<Board>().IsWhiteTurn() == isWhite && !theBoard.GetComponent<Board>().IsGameOver()) {
+        if (theBoard.GetComponent<Board>().IsWhiteTurn() == isWhite && !theBoard.GetComponent<Board>().IsGameOver() && (!theBoard.GetComponent<Board>().getCheck() || title.Equals("king"))) {
             Debug.Log("clicked");
             theBoard.GetComponent<Board>().SetSelected(xPos,yPos);
-            theBoard.GetComponent<Board>().Path(xPos,yPos,title,color);
+            ShowPath();
         }
     }
 }

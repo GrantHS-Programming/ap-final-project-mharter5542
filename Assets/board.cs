@@ -18,10 +18,16 @@ public class Board : MonoBehaviour
     private int lastY = -1;
     private bool isGameOver = false;
     private string winner = "none";
+    public bool check = false; 
+
+    public GameObject whiteKing;
+    public GameObject blackKing;
+
 
     void Start()
     {
-        
+        whiteKing.GetComponent<PieceScript>().PrintInfo();
+        blackKing.GetComponent<PieceScript>().PrintInfo();
     }
 
     // Update is called once per frame
@@ -45,6 +51,8 @@ public class Board : MonoBehaviour
     public string getWinner() {return winner;}
 
     public void MovePiece(int startX, int startY, int newX, int newY) {
+        check = false;
+        DestroyAllDots();
         if (startX >= 0 && startX < 8 && startY >= 0 && startY < 8) {
             selected = spacesTaken[startX,startY];
             if (newX >= 0 && newX < 8 && newY >= 0 && newY < 8) {
@@ -66,7 +74,10 @@ public class Board : MonoBehaviour
             Debug.Log("moved");
         }
         
+        
         whiteTurn = !whiteTurn;
+        LookForCheck();
+        
     }
 
     public bool IsWhiteTurn() {return whiteTurn;}
@@ -83,6 +94,8 @@ public class Board : MonoBehaviour
        
     }
 
+    
+
     public static GameObject[,] GetSpacesTaken() {return spacesTaken;}
     public GameObject GetSelected() {return selected;}
     public void SetSelected(int x, int y) {
@@ -91,10 +104,32 @@ public class Board : MonoBehaviour
         }
     }
 
-    
+    public void setCheck(bool isCheck) {check = isCheck;}
+    public bool getCheck() {return check;}
+    public GameObject GetWhiteKing() {
+        return whiteKing;    
+    }
 
-    public void Path(int x, int y, string title, string color) {
+    public GameObject GetBlackKing() {
+        return blackKing;  
+    }
+
+    public void LookForCheck() {
+        foreach (GameObject obj in pieces) {
+            if (obj.GetComponent<PieceScript>().GetIsWhite() != whiteTurn) {
+                obj.GetComponent<PieceScript>().ShowPathWithOtherPaths();
+            }
+        }
+        foreach(GameObject dot in dots) {
+            dot.GetComponent<DotScript>().IsOnKing();
+        } 
+        Debug.Log("check: " + check);
         DestroyAllDots();
+    }
+
+
+    public void Path(int x, int y, string title, string color, bool destroyDots) {
+        if (destroyDots) {DestroyAllDots();}
         /*for (int n = 7; n >= 0; n--) {
             string row = "row " + n + ": ";
             for (int i = 7; i >= 0; i--) {

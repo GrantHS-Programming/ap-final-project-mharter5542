@@ -16,7 +16,7 @@ public class SquareScript : MonoBehaviour
     
         xPos = (int)transform.position.x;
         yPos = (int)transform.position.y;
-        Debug.Log(xPos + ", " + yPos);
+        //Debug.Log(xPos + ", " + yPos);
 
     }
 

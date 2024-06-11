@@ -1094,6 +1094,14 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -4708932489534675201, guid: eb1010b95a4234901a25061e533a5009, type: 3}
+      propertyPath: blackKing
+      value: 
+      objectReference: {fileID: 700001107}
+    - target: {fileID: -4708932489534675201, guid: eb1010b95a4234901a25061e533a5009, type: 3}
+      propertyPath: whiteKing
+      value: 
+      objectReference: {fileID: 1161951861}
+    - target: {fileID: -4708932489534675201, guid: eb1010b95a4234901a25061e533a5009, type: 3}
       propertyPath: pieces.Array.size
       value: 32
       objectReference: {fileID: 0}
@@ -2686,6 +2694,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: WhiteKing
       objectReference: {fileID: 0}
+    - target: {fileID: 8525313848561069035, guid: 02876b5c8d08c47a2a75d728552e8d6f, type: 3}
+      propertyPath: m_TagString
+      value: WhiteKing
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 02876b5c8d08c47a2a75d728552e8d6f, type: 3}
 --- !u!1001 &2783625438858094728
@@ -3139,6 +3151,10 @@ PrefabInstance:
       objectReference: {fileID: 11157901}
     - target: {fileID: 7676347205714360012, guid: abd668b9dff274749a6d3ab173869234, type: 3}
       propertyPath: m_Name
+      value: BlackKing
+      objectReference: {fileID: 0}
+    - target: {fileID: 7676347205714360012, guid: abd668b9dff274749a6d3ab173869234, type: 3}
+      propertyPath: m_TagString
       value: BlackKing
       objectReference: {fileID: 0}
     - target: {fileID: 7676347205714360013, guid: abd668b9dff274749a6d3ab173869234, type: 3}

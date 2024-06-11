@@ -9,6 +9,8 @@ TagManager:
   - dot
   - turn
   - Board
+  - BlackKing
+  - WhiteKing
   layers:
   - Default
   - TransparentFX
