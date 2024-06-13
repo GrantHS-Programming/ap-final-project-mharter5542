@@ -13,8 +13,8 @@ public class DotScript : MonoBehaviour
     void Start()
     {
         board = GameObject.FindWithTag("Board");
-        
-        
+        //IsOnKing();
+        Debug.Log(transform.position.x + ", " + transform.position.y);
        
     }
 
@@ -24,7 +24,7 @@ public class DotScript : MonoBehaviour
         int xPos = (int)dot.transform.position.x;
         int yPos = (int)dot.transform.position.y;
         if (xPos < 0 || xPos > 7 || yPos < 0 || yPos > 7) {
-            Destroy(dot);
+            if (board.GetComponent<Board>().getDestroyOk()) {Destroy(dot);}
         }
 
         

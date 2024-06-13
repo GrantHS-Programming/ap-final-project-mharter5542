@@ -52,10 +52,11 @@ public class PieceScript : MonoBehaviour
     }
     public void ShowPathWithOtherPaths() {
         theBoard.GetComponent<Board>().Path(xPos,yPos,title,color, false);
+        Debug.Log(color);
     }
 
     void OnMouseDown() {
-        if (theBoard.GetComponent<Board>().IsWhiteTurn() == isWhite && !theBoard.GetComponent<Board>().IsGameOver() && (!theBoard.GetComponent<Board>().getCheck() || title.Equals("king"))) {
+        if (theBoard.GetComponent<Board>().IsWhiteTurn() == isWhite && !theBoard.GetComponent<Board>().IsGameOver() /*&& (!theBoard.GetComponent<Board>().getCheck() || title.Equals("king"))*/) {
             Debug.Log("clicked");
             theBoard.GetComponent<Board>().SetSelected(xPos,yPos);
             ShowPath();

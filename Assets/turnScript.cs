@@ -24,10 +24,16 @@ public class turnScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (board.GetComponent<Board>().IsGameOver()) {_turn.text = board.GetComponent<Board>().getWinner() + " wins!";}
+        if (board.GetComponent<Board>().IsGameOver()) {
+            if (board.GetComponent<Board>().getWinner().Equals("black")) {_turn.text = "Black Wins!";}
+            else {_turn.text = "White Wins!";}
+            
+        }
         else if (board.GetComponent<Board>().IsWhiteTurn()) {_turn.text = "White Turn";}
         else  {_turn.text = "Black Turn";}
-        
+        /*if (board.GetComponent<Board>().getCheck() == true) {
+            _turn.text = "Check, " + _turn.text;
+        }*/
 
     }
 }
